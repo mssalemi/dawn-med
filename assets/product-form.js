@@ -40,8 +40,52 @@ if (!customElements.get('product-form')) {
         }
         config.body = formData;
 
-        fetch(`${routes.cart_add_url}`, config)
-          .then((response) => response.json())
+        const findStringServiceElem = document.getElementById('string-service-enabled');
+        let addStringServiceToCart;
+        if (findStringServiceElem && findStringServiceElem.value == 'on') {
+          console.log('Adding String Service to Card');
+          debugger;
+          if (true) {
+            const variantId = '44995778609441';
+            const items = [
+              {
+                id: variantId,
+                quantity: 1,
+              },
+            ];
+
+            const body = {
+              items,
+            };
+            addStringServiceToCart = fetch('/cart/add.js', {
+              body: JSON.stringify(body),
+              credentials: 'same-origin',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'xmlhttprequest' /* XMLHttpRequest is ok too, it's case insensitive */,
+              },
+              method: 'POST',
+            })
+              .then(function (response) {
+                return response.json();
+              })
+              .then(function (json) {
+                /* we have JSON */
+                console.log(json);
+              })
+              .catch(function (err) {
+                /* uh oh, we have error. */
+                console.error(err);
+              });
+          }
+        }
+
+        debugger;
+
+        const addProductToCart = fetch(`${routes.cart_add_url}`, config)
+          .then((response) => {
+            return response.json();
+          })
           .then((response) => {
             if (response.status) {
               publish(PUB_SUB_EVENTS.cartError, {
@@ -92,6 +136,8 @@ if (!customElements.get('product-form')) {
             if (!this.error) this.submitButton.removeAttribute('aria-disabled');
             this.querySelector('.loading-overlay__spinner').classList.add('hidden');
           });
+
+        Promise.all([addProductToCart, addStringServiceToCart]).then((res) => console.log('[MOEW]', res));
       }
 
       handleErrorMessage(errorMessage = false) {

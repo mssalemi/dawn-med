@@ -61,7 +61,12 @@
       {% render 'product-media-gallery', variant_images: variant_images %}
     </div>
     <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}">
-        <div id="stringing-service-container">
+      <div>
+        <input type="checkbox" id="string-service-enabled" name="enable-ss">
+        <label id="string-service-enabled-label" for="enable-ss">Enable</label>
+      </div>  
+
+    <div id="product-stringing-service">
         </div>
     
         <product-info
@@ -200,7 +205,20 @@
                   </div>
                 </details>
               </div>
+
             {%- when 'quantity_selector' -%}
+              <div id="StringService-Form-{{ section.id }}" class="product-form__input">
+                <label>Add String Service</label>
+                <input
+                id="string-service-enabled"
+                class=""
+                type="checkbox"
+                name="quantity"
+                id="StringService-{{ section.id }}"
+                form="{{ product_form_id }}"
+              />
+
+              </div>
               <div
                 id="Quantity-Form-{{ section.id }}"
                 class="product-form__input product-form__quantity{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}"
